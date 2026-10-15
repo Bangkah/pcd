@@ -5,7 +5,7 @@ import numpy as np
 
 def power_law_process():
   # Memuat gambar dari folder assets
-  image = cv2.imread("assets/Ganeshji.webp")
+  image = cv2.imread("assests/gambar.png")
   if image is None:
     print(
         "Gagal memuat gambar dari folder assets. Periksa kembali nama atau path"

@@ -1,7 +1,9 @@
 from modules.closing_ops import closing_process
 from modules.dilation_ops import dilation_process
 from modules.edge_detection import edge_detection_process
+from modules.gaussian_lowpass import gaussian_lowpass_process
 from modules.gradient_ops import gradient_process
+from modules.ideal_highpass import ideal_highpass_process
 from modules.image_blur import blur_image_process
 from modules.image_inverse import inverse_image_process
 from modules.image_negative import negative_image_process
@@ -13,9 +15,7 @@ from modules.image_translation import translate_image_process
 from modules.morphological_hats import hats_process
 from modules.morphological_ops import erosion_process
 from modules.opening_ops import opening_process
-from modules.power_law_transformation import (
-    power_law_process,  # Mengimpor modul power law baru
-)
+from modules.power_law_transformation import power_law_process
 
 
 def tampilkan_menu():
@@ -36,13 +36,15 @@ def tampilkan_menu():
   print("14. Image Intensity Addition (+50)")
   print("15. Image Inversion / Negative (Terang <-> Gelap)")
   print("16. Power-Law (Gamma) Transformation")
-  print("17. Keluar")
+  print("17. Gaussian Lowpass Filter (GLPF)")
+  print("18. Ideal Highpass Filter (IHPF)")
+  print("19. Keluar")
 
 
 def main():
   while True:
     tampilkan_menu()
-    pilihan = input("Pilih menu (1-17): ")
+    pilihan = input("Pilih menu (1-19): ")
 
     if pilihan == "1":
       resize_image_process()
@@ -77,11 +79,15 @@ def main():
     elif pilihan == "16":
       power_law_process()
     elif pilihan == "17":
+      gaussian_lowpass_process()
+    elif pilihan == "18":
+      ideal_highpass_process()
+    elif pilihan == "19":
       print("Terima kasih telah menggunakan program ini. Sampai jumpa!")
       break
     else:
-      print("Pilihan tidak valid, silakan masukkan angka 1 sampai 17.")
+      print("Pilihan tidak valid, silakan masukkan angka 1 sampai 19.")
 
 
 if __name__ == "__main__":
-  main()677yyyy887876767668=]hbbbbbbbbbbbbbbbbb8xxxxxxxxxxxxxxxxx]]]]]]]]]]]]]]
+  main()
