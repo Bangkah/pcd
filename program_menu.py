@@ -1,3 +1,4 @@
+from modules.adaptive_threshold import adaptive_threshold_process
 from modules.closing_ops import closing_process
 from modules.dilation_ops import dilation_process
 from modules.edge_detection import edge_detection_process
@@ -15,6 +16,7 @@ from modules.image_translation import translate_image_process
 from modules.morphological_hats import hats_process
 from modules.morphological_ops import erosion_process
 from modules.opening_ops import opening_process
+from modules.otsu_thresholding import otsu_threshold_process
 from modules.power_law_transformation import power_law_process
 
 
@@ -38,13 +40,15 @@ def tampilkan_menu():
   print("16. Power-Law (Gamma) Transformation")
   print("17. Gaussian Lowpass Filter (GLPF)")
   print("18. Ideal Highpass Filter (IHPF)")
-  print("19. Keluar")
+  print("19. Otsu's Thresholding (Segmentation)")
+  print("20. Adaptive Thresholding")
+  print("21. Keluar")
 
 
 def main():
   while True:
     tampilkan_menu()
-    pilihan = input("Pilih menu (1-19): ")
+    pilihan = input("Pilih menu (1-21): ")
 
     if pilihan == "1":
       resize_image_process()
@@ -83,10 +87,14 @@ def main():
     elif pilihan == "18":
       ideal_highpass_process()
     elif pilihan == "19":
+      otsu_threshold_process()
+    elif pilihan == "20":
+      adaptive_threshold_process()
+    elif pilihan == "21":
       print("Terima kasih telah menggunakan program ini. Sampai jumpa!")
       break
     else:
-      print("Pilihan tidak valid, silakan masukkan angka 1 sampai 19.")
+      print("Pilihan tidak valid, silakan masukkan angka 1 sampai 21.")
 
 
 if __name__ == "__main__":
