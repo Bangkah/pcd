@@ -1,0 +1,95 @@
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
+import skimage.exposure as imexp
+
+
+def renyi_seg_fn(im, alpha):
+  # Menghitung histogram dari citra
+  hist = imexp.histogram(im)
+  # Konversi semua nilai ke float
+  hist_float = [float(i) for i in hist[0]]
+  # Menghitung PDF (Probability Density Function)
+  pdf = hist_float / np.sum(hist_float)
+  # Menghitung CDF (Cumulative Distribution Function)
+  cumsum_pdf = np.cumsum(pdf)
+
+  s = 0
+  e = 255  # Asumsi citra 8-bit
+  scalar = 1.0 / (1 - alpha)
+  eps = np.spacing(1)  # Nilai sangat kecil untuk mencegah pembagian dengan nol
+
+  rr = e - s
+  h1 = np.zeros((rr, 1))
+  h2 = np.zeros((rr, 1))
+
+  # Perulangan untuk menghitung entropi bagian latar belakang (h1) dan objek (h2)
+  for ii in range(1, rr):
+    iidash = ii + s
+    # Mencegah irisan kosong
+    if cumsum_pdf[iidash] == 0 or (1 - cumsum_pdf[iidash]) == 0:
+      continue
+
+    temp1 = np.power(pdf[1:iidash] / cumsum_pdf[iidash], scalar)
+    h1[ii] = np.log(np.sum(temp1) + eps)
+
+    temp2 = np.power(pdf[iidash + 1 : 255] / (1 - cumsum_pdf[iidash]), scalar)
+    h2[ii] = np.log(np.sum(temp2) + eps)
+
+  # Menjumlahkan h1 dan h2 untuk mendapatkan total entropi Renyi
+  total_entropy = scalar * (h1 + h2)
+
+  # Mencari indeks (threshold) yang menghasilkan nilai entropi maksimum
+  optimal_thresh = np.argmax(total_entropy) + s
+
+  print(f"Nilai Renyi Entropy Threshold yang didapat: {optimal_thresh}")
+
+  # Melakukan binerisasi citra berdasarkan threshold optimal
+  binary_image = im > optimal_thresh
+  binary_image_uint8 = np.array(binary_image * 255, dtype=np.uint8)
+
+  return im, binary_image_uint8, optimal_thresh
+
+
+def renyi_entropy_process():
+  # Memuat gambar dari folder assets dan ubah ke grayscale
+  image = cv2.imread("assets/mobil.png")
+  if image is None:
+    print(
+        "Gagal memuat gambar dari folder assets. Periksa kembali nama atau path"
+        " file."
+    )
+    return
+
+  gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+  print("\n--- PENGATURAN RENYI ENTROPY THRESHOLDING ---")
+  try:
+    alpha = float(
+        input("Masukkan nilai parameter alpha (misal: 1.5 atau 2.0): ")
+    )
+  except ValueError:
+    print("Input harus berupa angka.")
+    return
+
+  # Menjalankan fungsi segmentasi Renyi Entropy
+  orig, segmented, thresh_val = renyi_seg_fn(gray, alpha)
+
+  # Menampilkan hasil menggunakan Matplotlib
+  fig, axs = plt.subplots(1, 2, figsize=(7, 4))
+  axs[0].imshow(orig, cmap="gray")
+  axs[0].set_title("Original Grayscale")
+
+  axs[1].imshow(segmented, cmap="gray")
+  axs[1].set_title(f"Renyi Entropy (Thresh = {thresh_val})")
+
+  for ax in axs:
+    ax.set_xticks([])
+    ax.set_yticks([])
+
+  plt.tight_layout()
+  plt.show()
+
+
+if __name__ == "__main__":
+  renyi_entropy_process()
