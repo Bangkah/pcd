@@ -9,14 +9,14 @@ Repository ini berisi kumpulan program dan modul pembelajaran **Pemrograman Citr
 │   .gitignore
 │   program_menu.py
 │   README.md
-│
+│   
 ├───assests
 │       gambar.png
 │       grayscale.png
 │       image.jpg
 │       image.png
 │       mobil.png
-│
+│       
 ├───modules
 │       checkPcd.py
 │       closing_ops.py
@@ -39,24 +39,6 @@ Repository ini berisi kumpulan program dan modul pembelajaran **Pemrograman Citr
 │       opening_ops.py
 ```
 
-## Scaffold Proyek
-
-Struktur ini dibuat agar setiap operasi pengolahan citra dipisah sesuai fungsinya, sehingga mudah dikembangkan dan dipelajari:
-
-- `program_menu.py`: file utama yang menampilkan menu interaktif untuk menjalankan berbagai operasi citra.
-- `modules/`: berisi modul-modul fungsi seperti resizing, rotation, blurring, edge detection (Prewitt, Sobel, Canny), dan operasi morfologi.
-- `assests/`: folder berisi citra pendukung untuk demo dan pengujian.
-
-## Preview Hasil Program
-
-Berikut contoh citra yang digunakan dalam proyek untuk melihat hasil proses pemrosesan:
-
-![Citra asli](assests/image.png)
-
-![Citra grayscale](assests/grayscale.png)
-
-![Citra mobil](assests/mobil.png)
-
 ## Fitur & Menu Program
 
 Program utama (`program_menu.py`) menyediakan menu interaktif dengan pilihan operasi sebagai berikut:
@@ -66,21 +48,31 @@ Program utama (`program_menu.py`) menyediakan menu interaktif dengan pilihan ope
 3. **Image Translation**: Menggeser posisi citra pada sumbu $X$ dan $Y$.
 4. **Image Shearing**: Memiringkan citra secara horizontal atau vertikal.
 5. **Image Normalization**: Menormalisasi nilai intensitas piksel kanal warna.
-6. **Edge Detection (Prewitt, Sobel & Canny)**: Mendeteksi garis tepi objek pada citra dengan berbagai metode konvolusi seperti Prewitt, Sobel, dan Canny.
+6. **Edge Detection (Canny)**: Mendeteksi garis tepi objek pada citra.
 7. **Image Blurring (Gaussian)**: Menghaluskan citra menggunakan kernel Gaussian.
 8. **Morphological Erosion**: Mengikis piksel objek latar depan.
 9. **Morphological Dilation**: Menebalkan/memperluas piksel objek latar depan.
 10. **Morphological Opening**: Menghilangkan *noise* atau bintik kecil pada citra.
 11. **Morphological Closing**: Menutup lubang atau menyambungkan bagian objek yang terputus.
 12. **Morphological Gradient**: Menemukan garis luar (*outline*) objek.
-13. **Top Hat & Black Hat Operations**: Mendeteksi area terang pada latar belakang gelap atau sebaliknya (cocok untuk deteksi plat nomor).
+13. **Top Hat & Black Hat Operations**: Mendeteksi area terang pada latar belakang gelap atau sebaliknya.
+14. **Morphological Operations (Gabungan)**: Menampilkan erosi, dilasi, opening, dan closing.
+15. **Image Inversion**: Membalik intensitas warna citra.
+16. **Image Negative**: Membuat citra negatif.
+17. **Power-Law (Gamma) Transformation**: Mengubah intensitas citra dengan nilai gamma.
+18. **Gaussian Lowpass Filter**: Menghaluskan citra menggunakan filter lowpass Gaussian.
+19. **Ideal Highpass Filter**: Menonjolkan detail dan tepi citra.
+20. **Otsu Thresholding**: Melakukan segmentasi dengan threshold otomatis.
+21. **Adaptive Thresholding**: Melakukan segmentasi berdasarkan area lokal citra.
+22. **Simple Thresholding**: Melakukan segmentasi dengan threshold sederhana.
+23. **Histogram Grayscale**: Menghitung dan menampilkan histogram citra.
 
 ## Prasyarat & Instalasi
 
 Pastikan Anda sudah menginstal Python di komputer Anda. Jalankan perintah berikut di terminal untuk menginstal pustaka yang dibutuhkan:
 
 ```bash
-pip install opencv-python numpy matplotlib
+pip install opencv-python numpy matplotlib pillow scikit-image
 
 ```
 
@@ -100,4 +92,3 @@ python program_menu.py
 * **Muhammad Dhiyaul Atha**
 * NIM: 2024573010075
 * Mata Kuliah: Pemrograman Citra Digital (PCD)
-

@@ -1,43 +1,52 @@
+import os
 import cv2
+import numpy as np
+from PIL import Image
 import matplotlib.pyplot as plt
 
-
 def dilation_process():
-  image = cv2.imread("assets/image.png")
-  if image is None:
-    print(
-        "Gagal memuat gambar 'assets/image.png'. Periksa kembali nama atau path file."
-    )
-    return
+    NAMA_FILE = "assets/image.png" # Sesuaikan path gambar Anda
+    THRESHOLD = 128
+    
+    print("\n--- 1. BINARY DILATION (DILASI) ---")
+    if not os.path.exists(NAMA_FILE):
+        print(f"X File '{NAMA_FILE}' tidak ditemukan! Cek folder assets.")
+        return
 
-  # Konversi ke grayscale
-  gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # Load & Binarisasi
+    im_gray = np.array(Image.open(NAMA_FILE).convert("L"), dtype=np.uint8)
+    _, im_binary = cv2.threshold(im_gray, THRESHOLD, 255, cv2.THRESH_BINARY)
 
-  print("\n--- PENGATURAN DILATION ---")
-  print("Menerapkan serangkaian dilatasi (1 hingga 3 iterasi)...")
+    # Input User
+    teks_se = input("Ukuran kernel ganjil [default 3]: ").strip()
+    ukuran_se = int(teks_se) if teks_se.isdigit() and int(teks_se) >= 3 else 3
+    if ukuran_se % 2 == 0: ukuran_se += 1
 
-  # Menyiapkan subplot untuk menampilkan hasil perbandingan iterasi (1 baris, 4 kolom)
-  fig, axs = plt.subplots(1, 4, figsize=(12, 3))
+    teks_iter = input("Jumlah iterasi [default 1]: ").strip()
+    iterasi = int(teks_iter) if teks_iter.isdigit() and int(teks_iter) >= 1 else 1
 
-  # Menampilkan gambar asli (grayscale)
-  axs[0].imshow(gray, cmap="gray")
-  axs[0].set_title("Original Gray")
+    # Proses Dilasi
+    kernel = np.ones((ukuran_se, ukuran_se), np.uint8)
+    hasil = cv2.dilate(im_binary, kernel, iterations=iterasi)
 
-  # Melakukan perulangan untuk dilatasi sebanyak 1, 2, dan 3 kali iterasi
-  for i in range(0, 3):
-    # Menggunakan None agar OpenCV otomatis menggunakan structuring element 3x3 default
-    dilated = cv2.dilate(gray.copy(), None, iterations=i + 1)
+    # Visualisasi 3 Panel
+    fig, axes = plt.subplots(1, 3, figsize=(13, 4.5))
+    plt.subplots_adjust(bottom=0.22, wspace=0.08)
 
-    axs[i + 1].imshow(dilated, cmap="gray")
-    axs[i + 1].set_title(f"Dilated {i+1}x")
+    axes[0].imshow(im_gray, cmap="gray", vmin=0, vmax=255)
+    axes[0].axis("off")
+    axes[0].set_title("(a) Citra Grayscale Asli", fontsize=11)
 
-  for ax in axs:
-    ax.set_xticks([])
-    ax.set_yticks([])
+    axes[1].imshow(im_binary, cmap="gray", vmin=0, vmax=255)
+    axes[1].axis("off")
+    axes[1].set_title(f"(b) Citra Biner (T = {THRESHOLD})", fontsize=11)
 
-  plt.tight_layout()
-  plt.show()
+    axes[2].imshow(hasil, cmap="gray", vmin=0, vmax=255)
+    axes[2].axis("off")
+    axes[2].set_title(f"(c) Hasil Dilasi ({ukuran_se}x{ukuran_se}, iter={iterasi})", fontsize=11)
 
+    fig.text(0.5, 0.02, r"$\bf{DILASI:}$ $A \oplus B$ menggunakan $\tt{cv2.dilate()}$", ha="center", fontsize=11)
+    plt.show()
 
 if __name__ == "__main__":
-  dilation_process()
+    dilation_process()
